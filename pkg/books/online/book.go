@@ -1,6 +1,8 @@
 package online
 
 import (
+	"fmt"
+
 	"github.com/jeanmarcboite/bookins/pkg/books/online/goodreads"
 	"github.com/jeanmarcboite/bookins/pkg/books/online/openlibrary"
 )
@@ -63,7 +65,7 @@ func New(g goodreads.Book, o openlibrary.Book) Book {
 	b.Identifiers.ISBN13 = g.ISBN13
 	b.Identifiers.Goodreads = g.ID
 
-	b.Description = g.Description
+	b.Description = fmt.Sprintf("goodreads: %v", g.Description)
 
 	return b
 }
