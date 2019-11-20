@@ -8,8 +8,12 @@
     </div>
 </header>
 
+{{if .DebugMode}}
 <p>{{.dataString}}</p>
 <p>{{.dataHTML}}</p>
+{{end}} {{if .DevMode}}
+<p>{{.dataHTML}}</p>
+{{end}}
 
 <div class="container">
     <div class="row">
