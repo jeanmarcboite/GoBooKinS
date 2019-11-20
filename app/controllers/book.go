@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/jeanmarcboite/bookins/pkg/books/online"
 	"github.com/revel/revel"
 )
@@ -19,7 +20,10 @@ func (c Book) Details(id string) revel.Result {
 	}
 
 	title := book.Title
-	data := c.SprintHTML(book)
 
-	return c.Render(title, data)
+	data, _ := json.Marshal(book)
+	dataString := string(data)
+	dataHTML := c.SprintHTML(book)
+
+	return c.Render(title, dataString, dataHTML)
 }

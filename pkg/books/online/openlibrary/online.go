@@ -8,11 +8,11 @@ import (
 	"github.com/jeanmarcboite/bookins/pkg/books/online/net"
 )
 
-// LookUpISBN -- lookup a work on goodreads, with isbn
+// LookUpISBN -- lookup a work on openlibrary, with isbn
 func LookUpISBN(isbn string) (Book, error) {
 	url := fmt.Sprintf(net.Koanf.String("openlibrary.url.isbn"), isbn)
-	olresponse, err := net.HTTPGet(url)
-	response := strings.Replace(string(olresponse), "ISBN:9780061001116", "data", 1)
+	olResponse, err := net.HTTPGet(url)
+	response := strings.Replace(string(olResponse), fmt.Sprintf("ISBN:%v", isbn), "data", 1)
 
 	if err != nil {
 		return Book{}, err

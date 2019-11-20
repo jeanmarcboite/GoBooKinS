@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"reflect"
 
 	"github.com/revel/revel"
 )
@@ -29,11 +28,10 @@ func (c Controller) SprintHTML(x interface{}) template.HTML {
 		return template.HTML(err.Error())
 	}
 
-	return template.HTML(styleSheet+c.toHTML(xmu, 1))
+	return template.HTML(styleSheet + c.toHTML(xmu, 1))
 }
 
 func (c Controller) toHTML(x interface{}, id int) string {
-	c.Log.Debugf("toHTML %v", reflect.TypeOf(x))
 	switch v := x.(type) {
 	case map[string]interface{}:
 		return c.mapToHTML(v, id)
@@ -71,6 +69,7 @@ func (c Controller) mapToHTML(m map[string]interface{}, id int) string {
 	bufferString := bytes.NewBufferString("<ul>")
 	for k, v := range m {
 		id++
+		//c.Log.Debugf("ID%v: %v\n", id, reflect.TypeOf(v))
 		switch v.(type) {
 		case map[string]interface{}, []interface{}:
 			fmt.Fprintf(bufferString, checkbox, id, id, k, c.toHTML(v, id))
