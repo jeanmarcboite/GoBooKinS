@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"sort"
 
 	"github.com/revel/revel"
 )
@@ -67,14 +68,19 @@ func (c Controller) mapToHTML(m map[string]interface{}, id int) string {
 	value := `<li>"%v": "%v"</li>`
 
 	bufferString := bytes.NewBufferString("<ul>")
-	for k, v := range m {
+	keys := []string{}
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
 		id++
 		//c.Log.Debugf("ID%v: %v\n", id, reflect.TypeOf(v))
-		switch v.(type) {
+		switch m[k].(type) {
 		case map[string]interface{}, []interface{}:
-			fmt.Fprintf(bufferString, checkbox, id, id, k, c.toHTML(v, id))
+			fmt.Fprintf(bufferString, checkbox, id, id, k, c.toHTML(m[k], id))
 		default:
-			fmt.Fprintf(bufferString, value, k, c.toHTML(v, id))
+			fmt.Fprintf(bufferString, value, k, c.toHTML(m[k], id))
 		}
 	}
 	bufferString.WriteString("</ul>")
