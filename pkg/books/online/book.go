@@ -11,12 +11,13 @@ type Book struct {
 	SubTitle    string
 	Authors     []interface{}
 	Identifiers Identifiers
-	URL         map[string]interface{}
+	URL         map[string]string
 	Cover       map[string]string
 	Subjects    []interface{}
 
-	Inforigin []interface{}
-	Metadata  Metadata
+	Inforigin   []interface{}
+	Description string
+	Metadata    Metadata
 }
 
 // Metadata -- metadata coming from www
@@ -46,6 +47,24 @@ func New(g goodreads.Book, o openlibrary.Book) Book {
 		},
 	}
 
+	b.Cover = make(map[string]string)
+	if len(o.Data.Details.Covers[0]) > 0 {
+		b.Cover["openlibrary"] = o.Data.Details.Covers[0]
+	}
+	if g.ImageURL != "" {
+		b.Cover["goodreads"] = g.ImageURL
+	}
+
+	b.URL = make(map[string]string)
+	b.URL["preview"] = o.Data.PreviewURL
+	b.URL["openlibrary"] = o.Data.InfoURL
+
+	b.Identifiers.ISBN10 = g.ISBN
+	b.Identifiers.ISBN13 = g.ISBN13
+	b.Identifiers.Goodreads = g.ID
+
+	b.Description = g.Description
+
 	return b
 }
 
@@ -60,6 +79,7 @@ func LookUpISBN(isbn string) (Book, error) {
 
 	return New(g.Books[0], o), nil
 }
+
 /*
 // SearchTitle -- search for a work with a title
 func SearchTitle(title string) (Book, error) {
