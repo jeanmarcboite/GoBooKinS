@@ -101,6 +101,15 @@ type Book struct {
 	}
 }
 
+// AuthorsName -- return the names of the author(s)
+func (b Book) AuthorsName() []string {
+	names := make([]string, len(b.Data.Details.Authors))
+	for i, v := range b.Data.Details.Authors {
+		names[i] = v.Name
+	}
+	return names
+}
+
 /*
  'https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json'
  'https://openlibrary.org/api/books?bibkeys=ISBN:0201558025&format=json'

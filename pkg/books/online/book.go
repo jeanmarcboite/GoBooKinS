@@ -11,7 +11,7 @@ import (
 type Book struct {
 	Title       string
 	SubTitle    string
-	Authors     []interface{}
+	Authors     []string
 	Identifiers Identifiers
 	URL         map[string]string
 	Cover       map[string]string
@@ -57,6 +57,7 @@ func New(g goodreads.Book, o openlibrary.Book) Book {
 		b.Cover["goodreads"] = g.ImageURL
 	}
 
+	b.Authors = o.AuthorsName()
 	b.URL = make(map[string]string)
 	b.URL["preview"] = o.Data.PreviewURL
 	b.URL["openlibrary"] = o.Data.InfoURL
@@ -64,6 +65,7 @@ func New(g goodreads.Book, o openlibrary.Book) Book {
 	b.Identifiers.ISBN10 = g.ISBN
 	b.Identifiers.ISBN13 = g.ISBN13
 	b.Identifiers.Goodreads = g.ID
+	b.Identifiers.Openlibrary = o.Data.Details.Key
 
 	b.Description = fmt.Sprintf("goodreads: %v", g.Description)
 
